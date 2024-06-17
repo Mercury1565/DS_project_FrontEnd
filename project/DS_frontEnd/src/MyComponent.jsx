@@ -2,30 +2,35 @@ import React , {useState} from 'react'
 
 function MyComponent()
 {
-    const [car , setCar] = useState({year: 2010, make: "Ford", model:"F1-50"});
+    const [foods , setFoods] = useState(["Apple", "Orange"]);
 
-    function handleYearChange(event){
-        setCar(c => ({... car, year: event.target.value})); // Using the spread operator to copy the existing car object and then changing the year value
+    function handleAddFood(){
+        const newFood = document.getElementById("foodInput").value;
+        document.getElementById("foodInput").value = "";
+
+        //setFoods([...foods, newFood]) // we can do this but, remember to use updater functions as much as possible
+        setFoods(f => [...f, newFood])
     }
-    function handleMakeChange(event){
-        setCar(c => ({... car, make: event.target.value}));
+    function handleRemoveFood(index){
+        // Notice why 'i' and 'index' should be different
+        setFoods(f => f.filter((food, i) => i !== index))
     }
-    function handleModelChange(event){
-        setCar(c => ({... car, model: event.target.value}));
-    }
-    function hadleReset(event){
-        setCar(c => ({year: 2010, make: "Ford", model:"F1-50"}));
-    }
+   
     return (
-        <div>
-        <p>Your Favourite Car is: {car.year} {car.make} {car.model}</p>
-        
-        <input type = "number" value = {car.year} onChange = {handleYearChange}/><br/>
-        <input type = "text" value = {car.make} onChange = {handleMakeChange}/><br/>
-        <input type = "text" value = {car.model} onChange = {handleModelChange}/><br/>
-        <button onClick = {hadleReset}> Reset </button>
+        <div> 
+            <h2> List of Foods </h2>
+            <ul>
+                {foods.map((food, index) => 
+                <li key = {index} onClick = {() => handleRemoveFood(index)} > 
+                    {food} 
+                </li>)}
+                {/* Apparently, list items can be clicked :) */}
+            </ul>
 
+            <input type = "text" id = "foodInput" placeholder='Enter Food Name'/>
+            <button onClick = {handleAddFood}> Add Food </button>
         </div>
+    
     );
 
 }
